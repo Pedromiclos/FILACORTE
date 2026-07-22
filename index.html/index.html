@@ -1,399 +1,979 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FilaCorte - Assinatura do Barbeiro</title>
-  <style>
-    :root {
-      --bg-dark: #0a0a0a;
-      --card-bg: #121214;
-      --border-color: #26262a;
-      --primary-purple: #820ad1;
-      --primary-purple-hover: #6d08b1;
-      --accent-gold: #eab308;
-      --text-muted: #a1a1aa;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FilaCorte — Fila online para barbearias</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+:root{
+  --bg:#0B0B0D;
+  --bg-elevated:#141417;
+  --card:#1B1B20;
+  --card-hover:#212127;
+  --border:#2A2A31;
+  --gold:#C9A24B;
+  --gold-bright:#E9CD86;
+  --gold-dim:#7A6533;
+  --text:#F5F1E8;
+  --text-dim:#9C9A94;
+  --text-faint:#65635E;
+  --success:#4CAF7D;
+  --danger:#D9534F;
+  --white:#FFFFFF;
+  --radius:14px;
+  --shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+#app{max-width:1180px; margin:0 auto; padding:0 20px 80px;}
+h1,h2,h3,.display{font-family:'Fraunces',serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+a{color:inherit;}
+button{font-family:'Inter',sans-serif; cursor:pointer; border:none;}
+::selection{background:var(--gold); color:#0B0B0D;}
 
-    body {
-      background-color: var(--bg-dark);
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 40px;
-    }
+/* ---------- top nav ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(11,11,13,0.88); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  margin-bottom:36px;
+}
+.topbar-inner{max-width:1180px; margin:0 auto; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:20px;}
+.brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:600; font-size:20px; letter-spacing:0.3px;}
+.brand .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 14px var(--gold);}
+.tabs{display:flex; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:999px; padding:4px;}
+.tab{padding:9px 18px; border-radius:999px; background:transparent; color:var(--text-dim); font-size:13.5px; font-weight:600; transition:all .2s ease;}
+.tab.active{background:var(--gold); color:#0B0B0D;}
+.tab:not(.active):hover{color:var(--text); background:var(--card-hover);}
 
-    /* Top Bar */
-    header {
-      width: 100%;
-      max-width: 650px;
-      margin: 25px auto 10px auto;
-      padding: 0 15px;
-    }
+/* ---------- generic ---------- */
+.section{margin-bottom:56px;}
+.section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap;}
+.eyebrow{color:var(--gold); font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:700; margin-bottom:8px; display:block;}
+h2.title{font-size:28px; font-weight:600;}
+.subtle{color:var(--text-dim); font-size:14.5px; line-height:1.6;}
+.card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px;}
+.grid{display:grid; gap:16px;}
+.grid.cols-2{grid-template-columns:1fr 1fr;}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr;}}
 
-    .nav-container {
-      background-color: #141416;
-      border: 1px solid #242428;
-      border-radius: 40px;
-      padding: 8px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:13px 24px; border-radius:10px; font-weight:700; font-size:14.5px;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease; border:1px solid transparent;
+}
+.btn:active{transform:scale(0.97);}
+.btn-gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:#0B0B0D; box-shadow:0 8px 24px -8px rgba(201,162,75,0.5);}
+.btn-gold:hover{box-shadow:0 10px 28px -6px rgba(201,162,75,0.7);}
+.btn-ghost{background:transparent; border:1px solid var(--border); color:var(--text);}
+.btn-ghost:hover{border-color:var(--gold-dim); background:var(--card-hover);}
+.btn-danger{background:rgba(217,83,79,0.12); color:#F0928E; border:1px solid rgba(217,83,79,0.3);}
+.btn-danger:hover{background:rgba(217,83,79,0.2);}
+.btn-sm{padding:8px 14px; font-size:12.5px; border-radius:8px;}
+.btn-block{width:100%;}
+.btn:disabled{opacity:0.4; cursor:not-allowed;}
 
-    .logo {
-      font-size: 18px;
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-left: 8px;
-    }
+input,select,textarea{
+  width:100%; background:var(--bg-elevated); border:1px solid var(--border); color:var(--text);
+  padding:12px 14px; border-radius:9px; font-size:14px; font-family:'Inter',sans-serif; outline:none;
+  transition:border-color .15s ease;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+label{display:block; font-size:12px; color:var(--text-dim); margin-bottom:6px; font-weight:600; letter-spacing:.3px;}
+.field{margin-bottom:14px;}
+.pill{display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:11.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;}
+.pill-gold{background:rgba(201,162,75,0.15); color:var(--gold-bright); border:1px solid rgba(201,162,75,0.3);}
+.pill-green{background:rgba(76,175,125,0.15); color:#7CD8A8; border:1px solid rgba(76,175,125,0.3);}
+.pill-red{background:rgba(217,83,79,0.15); color:#F0928E; border:1px solid rgba(217,83,79,0.3);}
+.pill-gray{background:rgba(255,255,255,0.06); color:var(--text-dim); border:1px solid var(--border);}
+.hr{height:1px; background:var(--border); margin:20px 0;}
+.toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:var(--card); border:1px solid var(--gold-dim); color:var(--text); padding:13px 22px; border-radius:10px; font-size:13.5px; font-weight:600; z-index:200; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(-6px);}
+.empty{text-align:center; padding:50px 20px; color:var(--text-faint);}
+.empty .icon{font-size:34px; margin-bottom:10px;}
 
-    .logo-dot {
-      width: 10px;
-      height: 10px;
-      background-color: var(--accent-gold);
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
-    }
+/* ---------- hero / client home ---------- */
+.hero{
+  border-radius:20px; overflow:hidden; position:relative; border:1px solid var(--border);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(201,162,75,0.16), transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(201,162,75,0.08), transparent 50%),
+    linear-gradient(160deg, #17171B 0%, #0E0E10 100%);
+  padding:44px 40px;
+}
+.hero-top{display:flex; justify-content:space-between; align-items:flex-start; gap:30px; flex-wrap:wrap;}
+.shop-emblem{
+  width:64px; height:64px; border-radius:16px; background:linear-gradient(160deg,var(--gold-bright),var(--gold-dim));
+  display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0;
+  box-shadow:0 10px 30px -8px rgba(201,162,75,0.5);
+}
+.shop-name{font-size:32px; font-weight:600; margin-bottom:4px;}
+.shop-meta{display:flex; flex-wrap:wrap; gap:18px; margin-top:16px; color:var(--text-dim); font-size:13.5px;}
+.shop-meta span{display:flex; align-items:center; gap:7px;}
+.hero-cta{margin-top:28px; display:flex; gap:12px; flex-wrap:wrap;}
 
-    nav {
-      display: flex;
-      gap: 4px;
-      background-color: #1e1e24;
-      padding: 4px;
-      border-radius: 30px;
-    }
+/* ---------- queue ticket ---------- */
+.ticket{
+  border-radius:20px; border:1px solid var(--gold-dim);
+  background:linear-gradient(160deg, #191914 0%, #0E0E10 100%);
+  padding:40px; text-align:center; position:relative; overflow:hidden;
+}
+.ticket::before{content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, rgba(201,162,75,0.15), transparent 60%); pointer-events:none;}
+.ticket-label{color:var(--gold); font-size:12px; letter-spacing:3px; text-transform:uppercase; font-weight:700; margin-bottom:10px;}
+.ticket-number{font-family:'JetBrains Mono',monospace; font-size:96px; font-weight:700; line-height:1; color:var(--gold-bright); text-shadow:0 0 40px rgba(201,162,75,0.4); letter-spacing:-2px;}
+.ticket-sub{color:var(--text-dim); margin-top:8px; font-size:14px;}
+.ticket-stats{display:flex; justify-content:center; gap:40px; margin-top:30px; flex-wrap:wrap;}
+.ticket-stat .num{font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; color:var(--text);}
+.ticket-stat .lbl{font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1px; margin-top:4px;}
+.progress-track{height:6px; background:var(--border); border-radius:99px; margin-top:30px; overflow:hidden;}
+.progress-fill{height:100%; background:linear-gradient(90deg,var(--gold-dim),var(--gold-bright)); border-radius:99px; transition:width .6s ease;}
+.notif-log{margin-top:26px; text-align:left; display:flex; flex-direction:column; gap:8px;}
+.notif-item{display:flex; gap:10px; align-items:center; font-size:13px; color:var(--text-dim); background:var(--bg-elevated); padding:10px 14px; border-radius:9px; border:1px solid var(--border);}
+.notif-item .b{width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0;}
 
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 20px;
-      transition: all 0.2s ease;
-    }
+/* ---------- cut cards ---------- */
+.cut-card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:transform .18s ease, border-color .18s ease; cursor:pointer;}
+.cut-card:hover{transform:translateY(-3px); border-color:var(--gold-dim);}
+.cut-card.selected{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold);}
+.cut-thumb{height:110px; display:flex; align-items:center; justify-content:center; font-size:34px; background:linear-gradient(160deg, #23231F, #141416); border-bottom:1px solid var(--border);}
+.cut-body{padding:16px;}
+.cut-name{font-weight:700; font-size:15px; margin-bottom:4px;}
+.cut-desc{color:var(--text-faint); font-size:12.5px; line-height:1.5; margin-bottom:12px; min-height:32px;}
+.cut-foot{display:flex; justify-content:space-between; align-items:center;}
+.cut-price{font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--gold-bright); font-size:15px;}
+.cut-time{color:var(--text-faint); font-size:11.5px;}
 
-    nav a.active {
-      background-color: #d97706;
-      color: #000000;
-      font-weight: 700;
-    }
+/* ---------- pricing table ---------- */
+.price-table{width:100%; border-collapse:collapse;}
+.price-table th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:1px; color:var(--text-faint); padding:12px 16px; border-bottom:1px solid var(--border);}
+.price-table td{padding:16px; border-bottom:1px solid var(--border); font-size:14px;}
+.price-table tr:last-child td{border-bottom:none;}
+.price-table tr:hover td{background:var(--card-hover);}
 
-    nav a:hover:not(.active) {
-      color: #ffffff;
-    }
+/* ---------- plans ---------- */
+.plan-card{border-radius:var(--radius); padding:28px; border:1px solid var(--border); background:var(--card); position:relative;}
+.plan-card.featured{border-color:var(--gold); background:linear-gradient(160deg,#1E1B12,#17171B);}
+.plan-badge{position:absolute; top:-11px; left:24px; background:var(--gold); color:#0B0B0D; font-size:11px; font-weight:800; padding:4px 12px; border-radius:99px; letter-spacing:.4px;}
+.plan-price{font-family:'JetBrains Mono',monospace; font-size:34px; font-weight:700; margin:14px 0 4px;}
+.plan-list{margin-top:18px; display:flex; flex-direction:column; gap:10px; font-size:13.5px; color:var(--text-dim);}
+.plan-list li{list-style:none; display:flex; gap:8px;}
 
-    /* Main Container */
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding: 15px;
-    }
+/* ---------- queue rows (barber panel) ---------- */
+.queue-row{display:flex; align-items:center; gap:16px; padding:16px; border:1px solid var(--border); border-radius:12px; background:var(--card); margin-bottom:10px;}
+.queue-row.current{border-color:var(--gold); background:linear-gradient(90deg, rgba(201,162,75,0.08), transparent);}
+.q-pos{font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700; color:var(--gold-bright); width:36px; text-align:center; flex-shrink:0;}
+.q-info{flex:1; min-width:0;}
+.q-name{font-weight:700; font-size:14.5px;}
+.q-meta{font-size:12px; color:var(--text-faint); margin-top:2px;}
+.q-actions{display:flex; gap:8px; flex-shrink:0; flex-wrap:wrap;}
 
-    .card-container {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 32px 28px;
-      max-width: 430px;
-      width: 100%;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
-      text-align: center;
-    }
+/* ---------- stat cards ---------- */
+.stat-card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px;}
+.stat-val{font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:700; color:var(--gold-bright);}
+.stat-lbl{color:var(--text-faint); font-size:12px; text-transform:uppercase; letter-spacing:.6px; margin-top:6px;}
 
-    .brand-title {
-      font-size: 28px;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 10px;
-      letter-spacing: -0.5px;
-    }
+/* ---------- modal ---------- */
+.modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px; width:100%; max-width:520px; max-height:88vh; overflow-y:auto; padding:30px; box-shadow:var(--shadow);}
+.modal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+.close-x{width:32px; height:32px; border-radius:50%; background:var(--card); display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:16px;}
+.close-x:hover{color:var(--text); background:var(--card-hover);}
+.step-toggle{display:flex; gap:10px;}
+.opt-btn{flex:1; padding:12px; border-radius:99px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-dim); font-weight:600; font-size:13.5px;}
+.opt-btn.on{border-color:var(--gold); color:var(--gold-bright); background:rgba(201,162,75,0.08);}
 
-    .plano-badge {
-      display: inline-block;
-      background-color: rgba(130, 10, 209, 0.15);
-      color: #c084fc;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      border: 1px solid var(--primary-purple);
-    }
+/* login */
+.login-wrap{max-width:380px; margin:60px auto;}
+.rating-stars{font-size:26px; letter-spacing:4px; cursor:pointer; color:var(--text-faint);}
+.star.on{color:var(--gold);}
 
-    .subtexto {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 22px;
-    }
-
-    /* Caixa Pix */
-    .pix-box {
-      background-color: #ffffff;
-      color: #111111;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 22px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .pix-box p {
-      color: #27272a;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .chave-pix {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--primary-purple);
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-    }
-
-    .btn-copiar {
-      background-color: var(--primary-purple);
-      color: #ffffff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      width: 100%;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .btn-copiar:hover {
-      background-color: var(--primary-purple-hover);
-    }
-
-    /* Forms */
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      color: #d4d4d8;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      background-color: #1a1a1e;
-      border: 1px solid #3f3f46;
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 14px;
-      transition: border-color 0.2s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary-purple);
-    }
-
-    .btn-pagar {
-      background-color: var(--primary-purple);
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      width: 100%;
-      font-size: 16px;
-      margin-top: 8px;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
-    }
-
-    .btn-pagar:hover {
-      background-color: var(--primary-purple-hover);
-    }
-
-    .btn-pagar:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    #status-mensagem {
-      margin-top: 20px;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.5;
-    }
-
-    .link-gerado-box {
-      margin-top: 15px;
-      background: #182232;
-      border: 1px solid #3b82f6;
-      padding: 14px;
-      border-radius: 8px;
-      word-break: break-all;
-      text-align: center;
-    }
-
-    .link-gerado-box a {
-      color: #60a5fa;
-      font-weight: bold;
-      text-decoration: underline;
-      display: block;
-      margin-top: 6px;
-      font-size: 15px;
-    }
-  </style>
+.footer-note{margin-top:70px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-faint); font-size:12px; text-align:center; line-height:1.7;}
+::-webkit-scrollbar{width:8px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:99px;}
+</style>
 </head>
 <body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span> FilaCorte</div>
+    <div class="tabs" id="mainTabs"></div>
+  </div>
+</div>
+<div id="app"></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalBody"></div></div>
+<div class="toast" id="toast"></div>
 
-  <header>
-    <div class="nav-container">
-      <div class="logo">
-        <span class="logo-dot"></span> FilaCorte
+<script>
+/* ============================================================
+   FILACORTE — protótipo funcional (demo)
+   ============================================================ */
+
+const STORAGE_KEY = 'filacorte-state-v1';
+
+const DEFAULT_STATE = {
+  shop: {
+    name: "Barbearia do João",
+    hours: "Seg–Sáb · 09h às 20h",
+    address: "Rua das Tesouras, 128 — Centro",
+    whatsapp: "+55 11 91234-5678",
+  },
+  barbers: [
+    { id: 'b1', name: 'Carlos Mendes' },
+    { id: 'b2', name: 'Diego Alves' },
+    { id: 'b3', name: 'Rafael Souza' },
+  ],
+  cuts: [
+    { id:'c1', name:'Low Fade', desc:'Degradê baixo, acabamento na régua', price:45, time:30, icon:'✂️' },
+    { id:'c2', name:'Mid Fade', desc:'Degradê médio, transição suave', price:45, time:30, icon:'💈' },
+    { id:'c3', name:'High Fade', desc:'Degradê alto, contraste marcado', price:50, time:35, icon:'🪒' },
+    { id:'c4', name:'Social', desc:'Corte clássico para o dia a dia', price:35, time:25, icon:'👔' },
+    { id:'c5', name:'Americano', desc:'Topo texturizado, laterais curtas', price:45, time:30, icon:'✂️' },
+    { id:'c6', name:'Buzz Cut', desc:'Máquina uniforme, estilo minimalista', price:30, time:15, icon:'🔲' },
+    { id:'c7', name:'Undercut', desc:'Laterais raspadas, topo longo', price:50, time:35, icon:'⚡' },
+    { id:'c8', name:'Corte + Barba', desc:'Combo completo com toalha quente', price:70, time:50, icon:'🧔' },
+    { id:'c9', name:'Barba', desc:'Desenho e finalização na navalha', price:30, time:20, icon:'🪒' },
+    { id:'c10', name:'Pigmentação', desc:'Camuflagem de falhas e microagulhamento capilar', price:60, time:40, icon:'🎨' },
+  ],
+  queue: [],       // {id, name, phone, barberId, cutId, beard, notes, status, enteredAt}
+  history: [],     // finished/cancelled entries
+  ratings: [],
+  nextTicket: 101,
+  barberAuth: { user:'barbeiro', pass:'1234' },
+  tenants: [
+    { id:'t1', name:'Barbearia do João', plan:'Profissional', status:'ativo', trial:false, mrr:69.90 },
+    { id:'t2', name:'Studio Black Barber', plan:'Premium', status:'ativo', trial:false, mrr:99.90 },
+    { id:'t3', name:'Corte & Cia', plan:'Básico', status:'suspenso', trial:false, mrr:0 },
+    { id:'t4', name:'Vintage Cuts', plan:'Profissional', status:'ativo', trial:true, mrr:0 },
+  ],
+  plans: [
+    { name:'Básico', price:39.90, features:['1 barbeiro','Fila online','Notificações por app'] },
+    { name:'Profissional', price:69.90, features:['Até 5 barbeiros','Fila + agendamento','WhatsApp automático','Relatórios básicos'] },
+    { name:'Premium', price:99.90, features:['Barbeiros ilimitados','Multi-unidade','Relatórios avançados','Suporte prioritário'] },
+  ],
+};
+
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let currentTab = 'cliente';
+let clientSubView = 'home'; // home | joining | ticket
+let myTicketId = null;
+let barberLoggedIn = false;
+let barberSubView = 'fila';
+let selectedCutIdInQueue = null;
+
+async function loadState(){
+  try{
+    const r = localStorage.getItem(STORAGE_KEY);
+    if(r){ state = JSON.parse(r); }
+    else { await saveState(); }
+  }catch(e){ await saveState(); }
+  render();
+}
+async function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ console.error(e); }
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); document.getElementById('modalBody').innerHTML=''; }
+function openModal(html){ document.getElementById('modalBody').innerHTML = html; document.getElementById('modalOverlay').classList.add('open'); }
+
+/* ---------------- helpers ---------------- */
+function cutById(id){ return state.cuts.find(c=>c.id===id); }
+function barberById(id){ return state.barbers.find(b=>b.id===id); }
+function waitingQueue(){ return state.queue.filter(q=>q.status==='waiting'); }
+function estimateTime(pos){
+  return pos * 25;
+}
+function fmtMoney(v){ return 'R$ ' + v.toFixed(2).replace('.', ','); }
+
+/* ================= RENDER ROOT ================= */
+function render(){
+  renderTabs();
+  const app = document.getElementById('app');
+  if(currentTab==='cliente') app.innerHTML = renderCliente();
+  else if(currentTab==='barbeiro') app.innerHTML = renderBarbeiro();
+  else app.innerHTML = renderAdmin();
+  bindEvents();
+}
+function renderTabs(){
+  const tabs = [
+    {id:'cliente', label:'Área do Cliente'},
+    {id:'barbeiro', label:'Painel do Barbeiro'},
+    {id:'admin', label:'Painel Admin'},
+  ];
+  document.getElementById('mainTabs').innerHTML = tabs.map(t=>
+    `<button class="tab ${currentTab===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>`
+  ).join('');
+}
+
+/* ================= CLIENTE ================= */
+function renderCliente(){
+  if(clientSubView==='ticket' && myTicketId){
+    return renderTicketView();
+  }
+  if(clientSubView==='joining'){
+    return renderJoinForm();
+  }
+  return renderClienteHome();
+}
+
+function renderClienteHome(){
+  const s = state.shop;
+  return `
+  <div class="section">
+    <div class="hero">
+      <div class="hero-top">
+        <div style="display:flex; gap:18px; align-items:center;">
+          <div class="shop-emblem">💈</div>
+          <div>
+            <div class="shop-name display">${s.name}</div>
+            <div style="color:var(--text-dim); font-size:13.5px;">Fila online em tempo real</div>
+          </div>
+        </div>
+        <span class="pill pill-green">● Aberto agora</span>
       </div>
-      <nav>
-        <a href="#" class="active">Área do Cliente</a>
-        <a href="#">Painel Barbeiro</a>
-        <a href="#">Painel Admin</a>
-      </nav>
+      <div class="shop-meta">
+        <span>🕐 ${s.hours}</span>
+        <span>📍 ${s.address}</span>
+        <span>💬 ${s.whatsapp}</span>
+        <span>👥 ${waitingQueue().length} na fila agora</span>
+      </div>
+      <div class="hero-cta">
+        <button class="btn btn-gold" id="btnEnterQueue">Entrar na Fila →</button>
+        <button class="btn btn-ghost" onclick="window.open('https://wa.me/${s.whatsapp.replace(/\D/g,'')}','_blank')">Chamar no WhatsApp</button>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <div class="card-container">
-      <h1 class="brand-title">FilaCorte</h1>
-      <div class="plano-badge">Plano Mensal Barbeiro - R$ 29,90/mês</div>
-
-      <p class="subtexto">
-        Assine para criar sua fila virtual. Os seus clientes acessarão a fila de graça pelo link que você compartilhar!
-      </p>
-
-      <div class="pix-box">
-        <p>Chave Pix (Nubank):</p>
-        <div class="chave-pix" id="chave-pix">77981593498</div>
-        <button class="btn-copiar" id="btn-copiar" onclick="copiarChave()">Copiar Chave Pix</button>
-      </div>
-
-      <div class="form-group">
-        <label for="nomeBarbearia">Nome da sua Barbearia:</label>
-        <input type="text" id="nomeBarbearia" placeholder="Ex: Barbearia do Silva">
-      </div>
-
-      <div class="form-group">
-        <label for="email">Seu E-mail de cadastro:</label>
-        <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
-      </div>
-
-      <button class="btn-pagar" id="btn-confirmar" onclick="confirmarPagamento()">Já fiz o pagamento</button>
-
-      <div id="status-mensagem"></div>
+  <div class="section">
+    <div class="section-head">
+      <div><span class="eyebrow">Catálogo</span><h2 class="title">Modelos de corte</h2></div>
     </div>
-  </main>
+    <div class="grid cols-4">
+      ${state.cuts.map(c=>`
+        <div class="cut-card">
+          <div class="cut-thumb">${c.icon}</div>
+          <div class="cut-body">
+            <div class="cut-name">${c.name}</div>
+            <div class="cut-desc">${c.desc}</div>
+            <div class="cut-foot">
+              <span class="cut-price">${fmtMoney(c.price)}</span>
+              <span class="cut-time">${c.time} min</span>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
 
-  <script>
-    const CHAVE_PIX = "77981593498";
-    let statusInterval = null;
+  <div class="section">
+    <div class="section-head">
+      <div><span class="eyebrow">Preços</span><h2 class="title">Tabela de serviços</h2></div>
+    </div>
+    <div class="card" style="padding:0;">
+      <table class="price-table">
+        <thead><tr><th>Serviço</th><th>Tempo médio</th><th style="text-align:right;">Valor</th></tr></thead>
+        <tbody>
+          ${state.cuts.map(c=>`<tr><td>${c.name}</td><td>${c.time} min</td><td style="text-align:right;" class="mono">${fmtMoney(c.price)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    function copiarChave() {
-      navigator.clipboard.writeText(CHAVE_PIX);
-      const btn = document.getElementById('btn-copiar');
-      btn.innerText = "✓ Copiado!";
-      btn.style.backgroundColor = "#10b981";
-      setTimeout(() => {
-        btn.innerText = "Copiar Chave Pix";
-        btn.style.backgroundColor = "#820ad1";
-      }, 2500);
-    }
+  <div class="footer-note">
+    FilaCorte © 2026 — protótipo de demonstração. filacorte.com/${s.name.toLowerCase().replace(/\s+/g,'-')}
+  </div>
+  `;
+}
 
-    async function confirmarPagamento() {
-      const email = document.getElementById('email').value.trim();
-      const nomeBarbearia = document.getElementById('nomeBarbearia').value.trim();
-      const msgDiv = document.getElementById('status-mensagem');
-      const btn = document.getElementById('btn-confirmar');
+function renderJoinForm(){
+  const cuts = state.cuts;
+  return `
+  <div class="section" style="max-width:560px; margin:0 auto;">
+    <div class="section-head">
+      <div><span class="eyebrow">Entrar na fila</span><h2 class="title">Seus dados</h2></div>
+      <button class="btn btn-ghost btn-sm" id="btnBackHome">← Voltar</button>
+    </div>
+    <div class="card">
+      <div class="field"><label>Nome completo</label><input id="fName" placeholder="Seu nome"></div>
+      <div class="field"><label>Telefone / WhatsApp</label><input id="fPhone" placeholder="(11) 91234-5678"></div>
+      <div class="field">
+        <label>Escolher barbeiro</label>
+        <select id="fBarber">${state.barbers.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select>
+      </div>
+      <div class="field">
+        <label>Escolher modelo de corte</label>
+        <select id="fCut">${cuts.map(c=>`<option value="${c.id}">${c.name} — ${fmtMoney(c.price)}</option>`).join('')}</select>
+      </div>
+      <div class="field">
+        <label>Barba?</label>
+        <div class="step-toggle">
+          <button type="button" class="opt-btn on" id="beardYes" data-val="true">Sim</button>
+          <button type="button" class="opt-btn" id="beardNo" data-val="false">Não</button>
+        </div>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="fNotes" rows="3" placeholder="Alguma preferência? (opcional)"></textarea></div>
+      <button class="btn btn-gold btn-block" id="btnSubmitQueue">Confirmar e entrar na fila</button>
+    </div>
+  </div>
+  `;
+}
 
-      if (!email || !email.includes('@')) {
-        alert("Por favor, digite um e-mail válido.");
-        return;
-      }
+function renderTicketView(){
+  const entry = state.queue.find(q=>q.id===myTicketId);
+  if(!entry) { clientSubView='home'; return renderClienteHome(); }
+  const waiting = waitingQueue();
+  const posIdx = waiting.findIndex(q=>q.id===entry.id);
+  const cut = cutById(entry.cutId);
+  const barber = barberById(entry.barberId);
 
-      btn.disabled = true;
-      btn.innerText = "Aguardando confirmação...";
+  if(entry.status==='finished' || entry.status==='cancelled'){
+    return renderFinishedView(entry);
+  }
 
-      try {
-        const response = await fetch('/enviar-comprovante', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, nomeBarbearia })
-        });
+  const peopleAhead = posIdx;
+  const position = posIdx + 1;
+  const est = estimateTime(peopleAhead);
+  const progressPct = waiting.length ? Math.max(6, 100 - (posIdx/(waiting.length))*100) : 100;
 
-        const data = await response.json();
-        
-        if (response.ok) {
-          msgDiv.style.color = "#f59e0b"; // Amarelo
-          msgDiv.innerText = data.mensagem;
-          iniciarVerificacao(email);
-        } else {
-          alert(data.error || "Erro ao enviar a solicitação.");
-          btn.disabled = false;
-          btn.innerText = "Já fiz o pagamento";
+  const notifs = [];
+  if(peopleAhead===0) notifs.push('🔔 É a sua vez! Dirija-se ao barbeiro.');
+  else if(peopleAhead<=3) notifs.push(`🔔 Faltam ${peopleAhead} pessoas para a sua vez.`);
+  else if(peopleAhead<=5) notifs.push(`🔔 Faltam ${peopleAhead} pessoas — prepare-se.`);
+  notifs.push(`✅ Você entrou na fila às ${new Date(entry.enteredAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`);
+
+  return `
+  <div class="section" style="max-width:560px; margin:0 auto;">
+    <div class="ticket">
+      <div class="ticket-label">Sua senha</div>
+      <div class="ticket-number">#${entry.ticket}</div>
+      <div class="ticket-sub">${entry.name} · ${cut.name} com ${barber.name}</div>
+      <div class="ticket-stats">
+        <div class="ticket-stat"><div class="num">${position}º</div><div class="lbl">Posição</div></div>
+        <div class="ticket-stat"><div class="num">${peopleAhead}</div><div class="lbl">Na frente</div></div>
+        <div class="ticket-stat"><div class="num">~${est}min</div><div class="lbl">Tempo estimado</div></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+      <div class="notif-log">
+        ${notifs.map(n=>`<div class="notif-item"><span class="b"></span>${n}</div>`).join('')}
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+      <button class="btn btn-ghost btn-sm" id="btnLeaveQueue">Sair da fila</button>
+    </div>
+  </div>`;
+}
+
+function renderFinishedView(entry){
+  const already = state.ratings.find(r=>r.entryId===entry.id);
+  if(entry.status==='cancelled'){
+    return `<div class="section" style="max-width:480px;margin:60px auto;text-align:center;">
+      <div class="empty"><div class="icon">✂️</div><h3 class="display" style="font-size:20px; margin-bottom:8px;">Atendimento cancelado</h3>
+      <p class="subtle">Seu atendimento foi cancelado pela barbearia.</p>
+      <button class="btn btn-gold" style="margin-top:20px;" id="btnBackHome">Voltar ao início</button></div>
+    </div>`;
+  }
+  return `
+  <div class="section" style="max-width:480px; margin:50px auto; text-align:center;">
+    <div class="card">
+      <div style="font-size:40px; margin-bottom:10px;">🎉</div>
+      <h3 class="display" style="font-size:22px; margin-bottom:6px;">Corte finalizado!</h3>
+      <p class="subtle" style="margin-bottom:22px;">Como foi sua experiência hoje?</p>
+      ${already ? `<div class="rating-stars">${'★'.repeat(already.stars)}${'☆'.repeat(5-already.stars)}</div><p class="subtle" style="margin-top:14px;">Obrigado pela avaliação!</p>` : `
+      <div class="rating-stars" id="ratingStars">
+        ${[1,2,3,4,5].map(n=>`<span class="star" data-n="${n}">★</span>`).join('')}
+      </div>
+      <textarea id="ratingComment" rows="2" placeholder="Deixe um comentário (opcional)" style="margin-top:16px;"></textarea>
+      <button class="btn btn-gold btn-block" style="margin-top:14px;" id="btnSendRating">Enviar avaliação</button>
+      `}
+      <button class="btn btn-ghost btn-block" style="margin-top:12px;" id="btnBackHome">Voltar ao início</button>
+    </div>
+  </div>`;
+}
+
+/* ================= BARBEIRO ================= */
+function renderBarbeiro(){
+  if(!barberLoggedIn) return renderBarberLogin();
+  return `
+    <div class="section-head" style="margin-bottom:24px;">
+      <div><span class="eyebrow">Painel</span><h2 class="title">Olá, ${state.barbers[0].name.split(' ')[0]}</h2></div>
+      <div class="tabs" id="barberSubTabs">
+        ${['fila','cortes','precos','barbeiros','faturamento','historico'].map(v=>`
+          <button class="tab ${barberSubView===v?'active':''}" data-bsub="${v}">${({fila:'Fila',cortes:'Cortes',precos:'Preços',barbeiros:'Barbeiros',faturamento:'Faturamento',historico:'Histórico'})[v]}</button>
+        `).join('')}
+      </div>
+    </div>
+    <div id="barberContent">${renderBarberSub()}</div>
+  `;
+}
+
+function renderBarberLogin(){
+  return `
+  <div class="login-wrap">
+    <div class="card">
+      <div style="text-align:center; margin-bottom:22px;">
+        <div class="shop-emblem" style="margin:0 auto 14px;">💈</div>
+        <h3 class="display" style="font-size:22px;">Login do Barbeiro</h3>
+        <p class="subtle">Acesse o painel de gestão da fila</p>
+      </div>
+      <div class="field"><label>Usuário</label><input id="loginUser" value="barbeiro"></div>
+      <div class="field"><label>Senha</label><input id="loginPass" type="password" value="1234"></div>
+      <button class="btn btn-gold btn-block" id="btnDoLogin">Entrar</button>
+      <p class="subtle" style="text-align:center; margin-top:14px;">Demo: usuário <b>barbeiro</b> / senha <b>1234</b></p>
+    </div>
+  </div>`;
+}
+
+function renderBarberSub(){
+  if(barberSubView==='fila') return renderBarberQueue();
+  if(barberSubView==='cortes') return renderBarberCuts();
+  if(barberSubView==='precos') return renderBarberPrices();
+  if(barberSubView==='barbeiros') return renderBarberStaff();
+  if(barberSubView==='faturamento') return renderBarberRevenue();
+  if(barberSubView==='historico') return renderBarberHistory();
+}
+
+function renderBarberQueue(){
+  const waiting = waitingQueue();
+  return `
+    <div class="section">
+      <div class="grid cols-4" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-val">${waiting.length}</div><div class="stat-lbl">Na fila</div></div>
+        <div class="stat-card"><div class="stat-val">${state.history.filter(h=>h.status==='finished').length}</div><div class="stat-lbl">Atendidos hoje</div></div>
+        <div class="stat-card"><div class="stat-val">${waiting.length? estimateTime(waiting.length):0}min</div><div class="stat-lbl">Fila total est.</div></div>
+        <div class="stat-card"><div class="stat-val">${fmtMoney(state.history.filter(h=>h.status==='finished').reduce((a,c)=>a+cutById(c.cutId).price,0))}</div><div class="stat-lbl">Faturado hoje</div></div>
+      </div>
+      <div class="section-head">
+        <div><span class="eyebrow">Atendimento</span><h2 class="title">Fila em tempo real</h2></div>
+        <button class="btn btn-gold btn-sm" id="btnAddManual">+ Adicionar cliente</button>
+      </div>
+      ${waiting.length===0 ? `<div class="empty"><div class="icon">💈</div>Nenhum cliente na fila no momento.</div>` :
+      waiting.map((q,idx)=>`
+        <div class="queue-row ${idx===0?'current':''}">
+          <div class="q-pos">${idx+1}º</div>
+          <div class="q-info">
+            <div class="q-name">${q.name} <span class="pill pill-gray" style="margin-left:6px;">#${q.ticket}</span></div>
+            <div class="q-meta">${cutById(q.cutId).name} ${q.beard?'+ Barba':''} · ${barberById(q.barberId).name} · ${q.phone}${q.notes?' · "'+q.notes+'"':''}</div>
+          </div>
+          <div class="q-actions">
+            ${idx===0?`<button class="btn btn-gold btn-sm" data-action="finish" data-id="${q.id}">Finalizar</button>`:''}
+            <button class="btn btn-ghost btn-sm" data-action="skip" data-id="${q.id}">Pular</button>
+            <button class="btn btn-danger btn-sm" data-action="cancel" data-id="${q.id}">Cancelar</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderBarberCuts(){
+  return `
+  <div class="section">
+    <div class="section-head">
+      <div><span class="eyebrow">Catálogo</span><h2 class="title">Modelos de corte</h2></div>
+      <button class="btn btn-gold btn-sm" id="btnAddCut">+ Novo corte</button>
+    </div>
+    <div class="grid cols-4">
+      ${state.cuts.map(c=>`
+        <div class="cut-card">
+          <div class="cut-thumb">${c.icon}</div>
+          <div class="cut-body">
+            <div class="cut-name">${c.name}</div>
+            <div class="cut-desc">${c.desc}</div>
+            <div class="cut-foot"><span class="cut-price">${fmtMoney(c.price)}</span><span class="cut-time">${c.time} min</span></div>
+            <button class="btn btn-danger btn-sm btn-block" style="margin-top:12px;" data-action="delCut" data-id="${c.id}">Remover</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function renderBarberPrices(){
+  return `
+  <div class="section">
+    <div class="section-head"><div><span class="eyebrow">Gestão</span><h2 class="title">Editar preços</h2></div></div>
+    <div class="card" style="padding:0;">
+      <table class="price-table">
+        <thead><tr><th>Serviço</th><th>Tempo (min)</th><th>Preço</th><th></th></tr></thead>
+        <tbody>
+        ${state.cuts.map(c=>`
+          <tr>
+            <td>${c.name}</td>
+            <td><input style="width:80px;" type="number" data-field="time" data-id="${c.id}" value="${c.time}"></td>
+            <td><input style="width:100px;" type="number" step="0.01" data-field="price" data-id="${c.id}" value="${c.price}"></td>
+            <td><button class="btn btn-ghost btn-sm" data-action="savePrice" data-id="${c.id}">Salvar</button></td>
+          </tr>
+        `).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderBarberStaff(){
+  return `
+  <div class="section">
+    <div class="section-head">
+      <div><span class="eyebrow">Equipe</span><h2 class="title">Barbeiros cadastrados</h2></div>
+      <button class="btn btn-gold btn-sm" id="btnAddBarber">+ Novo barbeiro</button>
+    </div>
+    <div class="grid cols-3">
+      ${state.barbers.map(b=>`
+        <div class="card">
+          <div style="font-weight:700; font-size:15px;">${b.name}</div>
+          <div class="subtle" style="margin-top:4px;">${state.queue.filter(q=>q.barberId===b.id && q.status==='finished').length} atendimentos concluídos</div>
+          <button class="btn btn-danger btn-sm btn-block" style="margin-top:14px;" data-action="delBarber" data-id="${b.id}">Remover</button>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function renderBarberRevenue(){
+  const finished = state.history.filter(h=>h.status==='finished');
+  const total = finished.reduce((a,c)=>a + (cutById(c.cutId)?.price||0), 0);
+  const byBarber = {};
+  finished.forEach(f=>{ byBarber[f.barberId] = (byBarber[f.barberId]||0) + (cutById(f.cutId)?.price||0); });
+  return `
+  <div class="section">
+    <div class="section-head"><div><span class="eyebrow">Financeiro</span><h2 class="title">Faturamento</h2></div></div>
+    <div class="grid cols-3" style="margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-val">${fmtMoney(total)}</div><div class="stat-lbl">Total faturado</div></div>
+      <div class="stat-card"><div class="stat-val">${finished.length}</div><div class="stat-lbl">Clientes atendidos</div></div>
+      <div class="stat-card"><div class="stat-val">${finished.length? fmtMoney(total/finished.length):'R$ 0,00'}</div><div class="stat-lbl">Ticket médio</div></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:14px;">Por barbeiro</div>
+      ${state.barbers.map(b=>`
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);">
+          <span>${b.name}</span><span class="mono">${fmtMoney(byBarber[b.id]||0)}</span>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function renderBarberHistory(){
+  const items = [...state.history].reverse();
+  return `
+  <div class="section">
+    <div class="section-head"><div><span class="eyebrow">Registros</span><h2 class="title">Histórico de atendimentos</h2></div></div>
+    ${items.length===0? `<div class="empty"><div class="icon">📋</div>Nenhum atendimento registrado ainda.</div>` :
+    items.map(h=>`
+      <div class="queue-row">
+        <div class="q-info">
+          <div class="q-name">${h.name} <span class="pill ${h.status==='finished'?'pill-green':'pill-red'}" style="margin-left:6px;">${h.status==='finished'?'Concluído':'Cancelado'}</span></div>
+          <div class="q-meta">${cutById(h.cutId)?.name||'—'} · ${barberById(h.barberId)?.name||'—'} · ${new Date(h.enteredAt).toLocaleString('pt-BR')}</div>
+        </div>
+        <div class="cut-price">${h.status==='finished'?fmtMoney(cutById(h.cutId)?.price||0):''}</div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+/* ================= ADMIN ================= */
+function renderAdmin(){
+  const totalMrr = state.tenants.filter(t=>t.status==='ativo' && !t.trial).reduce((a,t)=>a+t.mrr,0);
+  return `
+  <div class="section">
+    <div class="section-head"><div><span class="eyebrow">Sistema SaaS</span><h2 class="title">Painel Administrador</h2></div></div>
+    <div class="grid cols-4" style="margin-bottom:28px;">
+      <div class="stat-card"><div class="stat-val">${state.tenants.length}</div><div class="stat-lbl">Barbearias</div></div>
+      <div class="stat-card"><div class="stat-val">${state.tenants.filter(t=>t.status==='ativo').length}</div><div class="stat-lbl">Assinaturas ativas</div></div>
+      <div class="stat-card"><div class="stat-val">${state.tenants.filter(t=>t.trial).length}</div><div class="stat-lbl">Em teste grátis</div></div>
+      <div class="stat-card"><div class="stat-val">${fmtMoney(totalMrr)}</div><div class="stat-lbl">MRR total</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div><span class="eyebrow">Multiempresa</span><h2 class="title">Barbearias cadastradas</h2></div>
+      <button class="btn btn-gold btn-sm" id="btnAddTenant">+ Nova barbearia</button>
+    </div>
+    <div class="card" style="padding:0;">
+      <table class="price-table">
+        <thead><tr><th>Barbearia</th><th>Plano</th><th>Status</th><th>Teste grátis</th><th></th></tr></thead>
+        <tbody>
+        ${state.tenants.map(t=>`
+          <tr>
+            <td>${t.name}</td>
+            <td>${t.plan}</td>
+            <td><span class="pill ${t.status==='ativo'?'pill-green':'pill-red'}">${t.status}</span></td>
+            <td>${t.trial? '<span class="pill pill-gold">Trial</span>':'—'}</td>
+            <td style="display:flex; gap:8px;">
+              <button class="btn btn-ghost btn-sm" data-action="toggleSuspend" data-id="${t.id}">${t.status==='ativo'?'Suspender':'Reativar'}</button>
+              <button class="btn btn-ghost btn-sm" data-action="toggleTrial" data-id="${t.id}">${t.trial?'Encerrar trial':'Dar trial'}</button>
+              <button class="btn btn-danger btn-sm" data-action="delTenant" data-id="${t.id}">Excluir</button>
+            </td>
+          </tr>
+        `).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div><span class="eyebrow">Comercial</span><h2 class="title">Planos de assinatura</h2></div></div>
+    <div class="grid cols-3">
+      ${state.plans.map((p,i)=>`
+        <div class="plan-card ${i===1?'featured':''}">
+          ${i===1?'<div class="plan-badge">Mais popular</div>':''}
+          <div style="font-weight:700; font-size:16px;">${p.name}</div>
+          <div class="plan-price mono">${fmtMoney(p.price)}<span style="font-size:13px; color:var(--text-faint); font-weight:400;">/mês</span></div>
+          <ul class="plan-list">${p.features.map(f=>`<li>✓ ${f}</li>`).join('')}</ul>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="footer-note">Pagamentos processados via PIX · Cartão · Boleto · Mercado Pago · Stripe · Asaas (simulado nesta demo)</div>
+  `;
+}
+
+/* ================= EVENTS ================= */
+function bindEvents(){
+  document.querySelectorAll('[data-tab]').forEach(el=>{
+    el.onclick = ()=>{ currentTab = el.dataset.tab; render(); };
+  });
+
+  // ---- cliente
+  const btnEnter = document.getElementById('btnEnterQueue');
+  if(btnEnter) btnEnter.onclick = ()=>{ clientSubView='joining'; render(); };
+  const btnBack = document.getElementById('btnBackHome');
+  if(btnBack) btnBack.onclick = ()=>{ clientSubView='home'; myTicketId=null; render(); };
+
+  const beardYes = document.getElementById('beardYes'), beardNo = document.getElementById('beardNo');
+  if(beardYes){
+    beardYes.onclick = ()=>{ beardYes.classList.add('on'); beardNo.classList.remove('on'); };
+    beardNo.onclick = ()=>{ beardNo.classList.add('on'); beardYes.classList.remove('on'); };
+  }
+
+  const btnSubmitQueue = document.getElementById('btnSubmitQueue');
+  if(btnSubmitQueue) btnSubmitQueue.onclick = async ()=>{
+    const name = document.getElementById('fName').value.trim();
+    const phone = document.getElementById('fPhone').value.trim();
+    if(!name || !phone){ showToast('Preencha nome e telefone.'); return; }
+    const entry = {
+      id: 'q'+Date.now(),
+      ticket: state.nextTicket,
+      name, phone,
+      barberId: document.getElementById('fBarber').value,
+      cutId: document.getElementById('fCut').value,
+      beard: document.getElementById('beardYes').classList.contains('on'),
+      notes: document.getElementById('fNotes').value.trim(),
+      status: 'waiting',
+      enteredAt: Date.now(),
+    };
+    state.nextTicket++;
+    state.queue.push(entry);
+    myTicketId = entry.id;
+    clientSubView = 'ticket';
+    await saveState();
+    showToast('Você entrou na fila!');
+    render();
+  };
+
+  const btnLeave = document.getElementById('btnLeaveQueue');
+  if(btnLeave) btnLeave.onclick = async ()=>{
+    const e = state.queue.find(q=>q.id===myTicketId);
+    if(e){ e.status='cancelled'; state.history.push(e); }
+    myTicketId=null; clientSubView='home';
+    await saveState(); render();
+  };
+
+  const ratingStars = document.getElementById('ratingStars');
+  if(ratingStars){
+    let selectedStars = 0;
+    ratingStars.querySelectorAll('.star').forEach(s=>{
+      s.onclick = ()=>{
+        selectedStars = parseInt(s.dataset.n);
+        ratingStars.querySelectorAll('.star').forEach(x=> x.classList.toggle('on', parseInt(x.dataset.n)<=selectedStars));
+      };
+    });
+    const btnSend = document.getElementById('btnSendRating');
+    if(btnSend) btnSend.onclick = async ()=>{
+      if(selectedStars===0){ showToast('Escolha uma nota de 1 a 5 estrelas.'); return; }
+      state.ratings.push({ entryId: myTicketId, stars: selectedStars, comment: document.getElementById('ratingComment').value });
+      await saveState(); showToast('Avaliação enviada, obrigado!'); render();
+    };
+  }
+
+  // ---- barbeiro login
+  const btnLogin = document.getElementById('btnDoLogin');
+  if(btnLogin) btnLogin.onclick = ()=>{
+    const u = document.getElementById('loginUser').value, p = document.getElementById('loginPass').value;
+    if(u===state.barberAuth.user && p===state.barberAuth.pass){ barberLoggedIn=true; render(); }
+    else showToast('Usuário ou senha inválidos.');
+  };
+
+  document.querySelectorAll('[data-bsub]').forEach(el=>{
+    el.onclick = ()=>{ barberSubView = el.dataset.bsub; render(); };
+  });
+
+  // ---- barber queue actions
+  document.querySelectorAll('[data-action="finish"],[data-action="skip"],[data-action="cancel"]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const id = btn.dataset.id;
+      const e = state.queue.find(q=>q.id===id);
+      if(!e) return;
+      if(btn.dataset.action==='finish'){ e.status='finished'; state.history.push(e); showToast('Atendimento finalizado.'); }
+      if(btn.dataset.action==='cancel'){ e.status='cancelled'; state.history.push(e); showToast('Cliente removido da fila.'); }
+      if(btn.dataset.action==='skip'){
+        const waiting = waitingQueue();
+        const idx = waiting.findIndex(q=>q.id===id);
+        if(idx>-1){ waiting.push(waiting.splice(idx,1)[0]); 
+          const others = state.queue.filter(q=>q.status!=='waiting');
+          state.queue = [...others, ...waiting];
         }
-
-      } catch (error) {
-        alert("Erro de conexão com o servidor.");
-        btn.disabled = false;
-        btn.innerText = "Já fiz o pagamento";
+        showToast('Cliente movido para o final da fila.');
       }
-    }
+      await saveState(); render();
+    };
+  });
 
-    function iniciarVerificacao(email) {
-      if (statusInterval) clearInterval(statusInterval);
+  const btnAddManual = document.getElementById('btnAddManual');
+  if(btnAddManual) btnAddManual.onclick = ()=> openModal(manualAddModal());
 
-      statusInterval = setInterval(async () => {
-        try {
-          const res = await fetch(`/status-acesso/${encodeURIComponent(email)}`);
-          const data = await res.json();
+  const btnAddCut = document.getElementById('btnAddCut');
+  if(btnAddCut) btnAddCut.onclick = ()=> openModal(addCutModal());
 
-          if (data.status === 'ativo') {
-            clearInterval(statusInterval);
-            const msgDiv = document.getElementById('status-mensagem');
-            msgDiv.style.color = "#10b981"; // Verde
-            msgDiv.innerHTML = `
-              🎉 Pagamento Confirmado!<br>Seu plano está ativo.
-              <div class="link-gerado-box">
-                <small style="color:#aaa;">Link exclusivo da sua fila:</small><br>
-                <a href="${data.linkFila}" target="_blank">${data.linkFila}</a>
-              </div>
-            `;
-          }
-        } catch (e) {
-          console.error("Verificando status...");
-        }
-      }, 3500);
-    }
-  </script>
+  const btnAddBarber = document.getElementById('btnAddBarber');
+  if(btnAddBarber) btnAddBarber.onclick = ()=> openModal(addBarberModal());
+
+  const btnAddTenant = document.getElementById('btnAddTenant');
+  if(btnAddTenant) btnAddTenant.onclick = ()=> openModal(addTenantModal());
+
+  document.querySelectorAll('[data-action="delCut"]').forEach(b=> b.onclick = async ()=>{ state.cuts = state.cuts.filter(c=>c.id!==b.dataset.id); await saveState(); render(); });
+  document.querySelectorAll('[data-action="delBarber"]').forEach(b=> b.onclick = async ()=>{ state.barbers = state.barbers.filter(x=>x.id!==b.dataset.id); await saveState(); render(); });
+  document.querySelectorAll('[data-action="savePrice"]').forEach(b=> b.onclick = async ()=>{
+    const id = b.dataset.id;
+    const priceInput = document.querySelector(`input[data-field="price"][data-id="${id}"]`);
+    const timeInput = document.querySelector(`input[data-field="time"][data-id="${id}"]`);
+    const c = cutById(id);
+    c.price = parseFloat(priceInput.value)||c.price;
+    c.time = parseInt(timeInput.value)||c.time;
+    await saveState(); showToast('Preço atualizado.'); render();
+  });
+
+  // ---- admin
+  document.querySelectorAll('[data-action="toggleSuspend"]').forEach(b=> b.onclick = async ()=>{
+    const t = state.tenants.find(x=>x.id===b.dataset.id);
+    t.status = t.status==='ativo' ? 'suspenso' : 'ativo';
+    await saveState(); render();
+  });
+  document.querySelectorAll('[data-action="toggleTrial"]').forEach(b=> b.onclick = async ()=>{
+    const t = state.tenants.find(x=>x.id===b.dataset.id);
+    t.trial = !t.trial;
+    await saveState(); render();
+  });
+  document.querySelectorAll('[data-action="delTenant"]').forEach(b=> b.onclick = async ()=>{
+    state.tenants = state.tenants.filter(x=>x.id!==b.dataset.id);
+    await saveState(); render();
+  });
+
+  // modal close
+  document.getElementById('modalOverlay').onclick = (e)=>{ if(e.target.id==='modalOverlay') closeModal(); };
+}
+
+/* ---- modal contents ---- */
+function manualAddModal(){
+  return `
+  <div class="modal-head"><h3 class="display" style="font-size:19px;">Adicionar cliente manualmente</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+  <div class="field"><label>Nome</label><input id="mName"></div>
+  <div class="field"><label>Telefone</label><input id="mPhone"></div>
+  <div class="field"><label>Barbeiro</label><select id="mBarber">${state.barbers.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
+  <div class="field"><label>Corte</label><select id="mCut">${state.cuts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select></div>
+  <button class="btn btn-gold btn-block" onclick="submitManualAdd()">Adicionar à fila</button>
+  `;
+}
+async function submitManualAdd(){
+  const name = document.getElementById('mName').value.trim();
+  const phone = document.getElementById('mPhone').value.trim();
+  if(!name){ showToast('Informe o nome.'); return; }
+  state.queue.push({
+    id:'q'+Date.now(), ticket: state.nextTicket, name, phone,
+    barberId: document.getElementById('mBarber').value,
+    cutId: document.getElementById('mCut').value,
+    beard:false, notes:'', status:'waiting', enteredAt: Date.now(),
+  });
+  state.nextTicket++;
+  await saveState(); closeModal(); render(); showToast('Cliente adicionado à fila.');
+}
+
+function addCutModal(){
+  return `
+  <div class="modal-head"><h3 class="display" style="font-size:19px;">Novo modelo de corte</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+  <div class="field"><label>Nome</label><input id="ncName"></div>
+  <div class="field"><label>Descrição</label><input id="ncDesc"></div>
+  <div class="grid cols-2">
+    <div class="field"><label>Preço (R$)</label><input id="ncPrice" type="number" step="0.01"></div>
+    <div class="field"><label>Tempo (min)</label><input id="ncTime" type="number"></div>
+  </div>
+  <div class="field"><label>Ícone (emoji)</label><input id="ncIcon" value="✂️"></div>
+  <button class="btn btn-gold btn-block" onclick="submitAddCut()">Salvar corte</button>
+  `;
+}
+async function submitAddCut(){
+  const name = document.getElementById('ncName').value.trim();
+  if(!name){ showToast('Informe o nome do corte.'); return; }
+  state.cuts.push({
+    id:'c'+Date.now(), name,
+    desc: document.getElementById('ncDesc').value.trim() || 'Sem descrição',
+    price: parseFloat(document.getElementById('ncPrice').value)||0,
+    time: parseInt(document.getElementById('ncTime').value)||20,
+    icon: document.getElementById('ncIcon').value || '✂️',
+  });
+  await saveState(); closeModal(); render(); showToast('Corte cadastrado.');
+}
+
+function addBarberModal(){
+  return `
+  <div class="modal-head"><h3 class="display" style="font-size:19px;">Novo barbeiro</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+  <div class="field"><label>Nome</label><input id="nbName"></div>
+  <button class="btn btn-gold btn-block" onclick="submitAddBarber()">Cadastrar</button>
+  `;
+}
+async function submitAddBarber(){
+  const name = document.getElementById('nbName').value.trim();
+  if(!name){ showToast('Informe o nome.'); return; }
+  state.barbers.push({ id:'b'+Date.now(), name });
+  await saveState(); closeModal(); render(); showToast('Barbeiro cadastrado.');
+}
+
+function addTenantModal(){
+  return `
+  <div class="modal-head"><h3 class="display" style="font-size:19px;">Nova barbearia</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+  <div class="field"><label>Nome da barbearia</label><input id="ntName"></div>
+  <div class="field"><label>Plano</label><select id="ntPlan">${state.plans.map(p=>`<option value="${p.name}">${p.name} — ${fmtMoney(p.price)}</option>`).join('')}</select></div>
+  <button class="btn btn-gold btn-block" onclick="submitAddTenant()">Cadastrar barbearia</button>
+  `;
+}
+async function submitAddTenant(){
+  const name = document.getElementById('ntName').value.trim();
+  if(!name){ showToast('Informe o nome.'); return; }
+  const planName = document.getElementById('ntPlan').value;
+  const plan = state.plans.find(p=>p.name===planName);
+  state.tenants.push({ id:'t'+Date.now(), name, plan: planName, status:'ativo', trial:true, mrr: plan.price });
+  await saveState(); closeModal(); render(); showToast('Barbearia cadastrada.');
+}
+
+loadState();
+</script>
 </body>
 </html>
