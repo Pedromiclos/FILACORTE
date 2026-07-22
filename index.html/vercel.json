@@ -1,45 +1,8 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "filacorte-backend/src/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/enviar-comprovante",
-      "dest": "filacorte-backend/src/server.js"
-    },
-    {
-      "src": "/status-acesso/(.*)",
-      "dest": "filacorte-backend/src/server.js"
-    },
-    {
-      "src": "/admin/aprovar-barbeiro",
-      "dest": "filacorte-backend/src/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "index.html"
-    }
-  ]
-}{
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/enviar-comprovante", "destination": "/api/index.js" },
     { "source": "/status-acesso/(.*)", "destination": "/api/index.js" },
     { "source": "/admin/aprovar-barbeiro", "destination": "/api/index.js" }
-  ]
-}
-{
-  "rewrites": [
-    { "source": "/enviar-comprovante", "destination": "/api/index.js" },
-    { "source": "/status-acesso/(.*)", "destination": "/api/index.js" },
-    { "source": "/admin/aprovar-barbeiro", "destination": "/api/index.js" },
-    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
