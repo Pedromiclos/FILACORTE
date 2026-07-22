@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FilaCorte - Assinatura do Barbeiro</title>
   <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --card-bg: #121214;
+      --border-color: #26262a;
+      --primary-purple: #820ad1;
+      --primary-purple-hover: #6d08b1;
+      --accent-gold: #eab308;
+      --text-muted: #a1a1aa;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,7 +23,7 @@
     }
 
     body {
-      background-color: #0a0a0a;
+      background-color: var(--bg-dark);
       color: #ffffff;
       min-height: 100vh;
       display: flex;
@@ -22,7 +32,7 @@
       padding-bottom: 40px;
     }
 
-    /* Barra Superior (Top Bar) */
+    /* Top Bar */
     header {
       width: 100%;
       max-width: 650px;
@@ -54,7 +64,7 @@
     .logo-dot {
       width: 10px;
       height: 10px;
-      background-color: #eab308;
+      background-color: var(--accent-gold);
       border-radius: 50%;
       box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
     }
@@ -68,7 +78,7 @@
     }
 
     nav a {
-      color: #a1a1aa;
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
@@ -78,7 +88,7 @@
     }
 
     nav a.active {
-      background-color: #d97706; /* Cor Dourada/Amarela do layout original */
+      background-color: #d97706;
       color: #000000;
       font-weight: 700;
     }
@@ -87,7 +97,7 @@
       color: #ffffff;
     }
 
-    /* Conteúdo Principal */
+    /* Main Container */
     main {
       flex: 1;
       display: flex;
@@ -97,10 +107,9 @@
       padding: 15px;
     }
 
-    /* Cartão de Assinatura */
     .card-container {
-      background-color: #121214;
-      border: 1px solid #26262a;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 32px 28px;
       max-width: 430px;
@@ -126,17 +135,17 @@
       font-size: 13px;
       font-weight: 700;
       margin-bottom: 16px;
-      border: 1px solid #820ad1;
+      border: 1px solid var(--primary-purple);
     }
 
     .subtexto {
-      color: #a1a1aa;
+      color: var(--text-muted);
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 22px;
     }
 
-    /* Caixa do Pix (Branca com Texto Escuro Legível) */
+    /* Caixa Pix */
     .pix-box {
       background-color: #ffffff;
       color: #111111;
@@ -156,13 +165,13 @@
     .chave-pix {
       font-size: 22px;
       font-weight: 800;
-      color: #820ad1;
+      color: var(--primary-purple);
       letter-spacing: 1px;
       margin-bottom: 12px;
     }
 
     .btn-copiar {
-      background-color: #820ad1;
+      background-color: var(--primary-purple);
       color: #ffffff;
       border: none;
       padding: 12px;
@@ -171,14 +180,14 @@
       font-weight: 700;
       width: 100%;
       font-size: 14px;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     .btn-copiar:hover {
-      background-color: #6d08b1;
+      background-color: var(--primary-purple-hover);
     }
 
-    /* Inputs do Formulário */
+    /* Forms */
     .form-group {
       margin-bottom: 16px;
       text-align: left;
@@ -205,12 +214,11 @@
 
     input:focus {
       outline: none;
-      border-color: #820ad1;
+      border-color: var(--primary-purple);
     }
 
-    /* Botão Principal */
     .btn-pagar {
-      background-color: #820ad1;
+      background-color: var(--primary-purple);
       color: #ffffff;
       border: none;
       padding: 14px;
@@ -225,15 +233,14 @@
     }
 
     .btn-pagar:hover {
-      background-color: #6d08b1;
+      background-color: var(--primary-purple-hover);
     }
 
     .btn-pagar:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-    /* Mensagem de Status */
     #status-mensagem {
       margin-top: 20px;
       font-size: 14px;
@@ -248,7 +255,7 @@
       padding: 14px;
       border-radius: 8px;
       word-break: break-all;
-      text-align: left;
+      text-align: center;
     }
 
     .link-gerado-box a {
@@ -256,13 +263,13 @@
       font-weight: bold;
       text-decoration: underline;
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
+      font-size: 15px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Menu Superior Original -->
   <header>
     <div class="nav-container">
       <div class="logo">
@@ -270,13 +277,12 @@
       </div>
       <nav>
         <a href="#" class="active">Área do Cliente</a>
-        <a href="#">Painel do Barbeiro</a>
+        <a href="#">Painel Barbeiro</a>
         <a href="#">Painel Admin</a>
       </nav>
     </div>
   </header>
 
-  <!-- Conteúdo Central -->
   <main>
     <div class="card-container">
       <h1 class="brand-title">FilaCorte</h1>
@@ -286,14 +292,12 @@
         Assine para criar sua fila virtual. Os seus clientes acessarão a fila de graça pelo link que você compartilhar!
       </p>
 
-      <!-- Caixa Pix -->
       <div class="pix-box">
         <p>Chave Pix (Nubank):</p>
         <div class="chave-pix" id="chave-pix">77981593498</div>
-        <button class="btn-copiar" onclick="copiarChave()">Copiar Chave Pix</button>
+        <button class="btn-copiar" id="btn-copiar" onclick="copiarChave()">Copiar Chave Pix</button>
       </div>
 
-      <!-- Formulário -->
       <div class="form-group">
         <label for="nomeBarbearia">Nome da sua Barbearia:</label>
         <input type="text" id="nomeBarbearia" placeholder="Ex: Barbearia do Silva">
@@ -312,10 +316,17 @@
 
   <script>
     const CHAVE_PIX = "77981593498";
+    let statusInterval = null;
 
     function copiarChave() {
       navigator.clipboard.writeText(CHAVE_PIX);
-      alert("Chave Pix copiada para a área de transferência!");
+      const btn = document.getElementById('btn-copiar');
+      btn.innerText = "✓ Copiado!";
+      btn.style.backgroundColor = "#10b981";
+      setTimeout(() => {
+        btn.innerText = "Copiar Chave Pix";
+        btn.style.backgroundColor = "#820ad1";
+      }, 2500);
     }
 
     async function confirmarPagamento() {
@@ -324,8 +335,8 @@
       const msgDiv = document.getElementById('status-mensagem');
       const btn = document.getElementById('btn-confirmar');
 
-      if (!email) {
-        alert("Por favor, informe seu e-mail.");
+      if (!email || !email.includes('@')) {
+        alert("Por favor, digite um e-mail válido.");
         return;
       }
 
@@ -333,48 +344,55 @@
       btn.innerText = "Aguardando confirmação...";
 
       try {
-        const response = await fetch('http://localhost:3000/enviar-comprovante', {
+        const response = await fetch('/enviar-comprovante', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, nomeBarbearia })
         });
 
         const data = await response.json();
-        msgDiv.style.color = "#f59e0b"; // Amarelo
-        msgDiv.innerText = data.mensagem;
-
-        // Inicia verificação do Pix no backend
-        verificarStatus(email);
+        
+        if (response.ok) {
+          msgDiv.style.color = "#f59e0b"; // Amarelo
+          msgDiv.innerText = data.mensagem;
+          iniciarVerificacao(email);
+        } else {
+          alert(data.error || "Erro ao enviar a solicitação.");
+          btn.disabled = false;
+          btn.innerText = "Já fiz o pagamento";
+        }
 
       } catch (error) {
-        alert("Erro ao conectar com o servidor. Verifique se o Node.js está rodando.");
+        alert("Erro de conexão com o servidor.");
         btn.disabled = false;
         btn.innerText = "Já fiz o pagamento";
       }
     }
 
-    function verificarStatus(email) {
-      const interval = setInterval(async () => {
+    function iniciarVerificacao(email) {
+      if (statusInterval) clearInterval(statusInterval);
+
+      statusInterval = setInterval(async () => {
         try {
-          const res = await fetch(`http://localhost:3000/status-acesso/${email}`);
+          const res = await fetch(`/status-acesso/${encodeURIComponent(email)}`);
           const data = await res.json();
 
           if (data.status === 'ativo') {
-            clearInterval(interval);
+            clearInterval(statusInterval);
             const msgDiv = document.getElementById('status-mensagem');
             msgDiv.style.color = "#10b981"; // Verde
             msgDiv.innerHTML = `
-              🎉 Pagamento Confirmado!<br>Seu plano está ativo.<br>
+              🎉 Pagamento Confirmado!<br>Seu plano está ativo.
               <div class="link-gerado-box">
-                <small style="color:#aaa;">Link da sua fila para enviar aos clientes:</small><br>
+                <small style="color:#aaa;">Link exclusivo da sua fila:</small><br>
                 <a href="${data.linkFila}" target="_blank">${data.linkFila}</a>
               </div>
             `;
           }
         } catch (e) {
-          console.error("Aguardando aprovação...");
+          console.error("Verificando status...");
         }
-      }, 4000);
+      }, 3500);
     }
   </script>
 </body>

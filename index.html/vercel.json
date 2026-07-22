@@ -35,3 +35,11 @@
     { "source": "/admin/aprovar-barbeiro", "destination": "/api/index.js" }
   ]
 }
+{
+  "rewrites": [
+    { "source": "/enviar-comprovante", "destination": "/api/index.js" },
+    { "source": "/status-acesso/(.*)", "destination": "/api/index.js" },
+    { "source": "/admin/aprovar-barbeiro", "destination": "/api/index.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
