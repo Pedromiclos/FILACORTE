@@ -1,0 +1,20 @@
+{
+  "name": "filacorte-backend",
+  "version": "1.0.0",
+  "description": "API REST do FilaCorte — sistema de fila online para barbearias (SaaS multi-tenant)",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/db.js --reseed"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "tenants": [
+    {
+      "id": "te_7d5381c80dd4f127",
+      "createdAt": 1784727311656,
+      "name": "Barbearia do João",
+      "slug": "barbearia-do-joao",
+      "hours": "Seg–Sáb · 09h às 20h",
+      "address": "Rua das Tesouras, 128 — Centro",
+      "whatsapp": "+55 11 91234-5678",
+      "plan": "Profissional",
+      "status": "ativo",
+      "trial": false
+    }
+  ],
+  "users": [
+    {
+      "id": "us_40dc959b3333ebd8",
+      "createdAt": 1784727311723,
+      "tenantId": null,
+      "name": "Administrador FilaCorte",
+      "email": "admin@filacorte.com",
+      "passwordHash": "1725f08f562e77d515cc49e8369fcf1f:697ba1ea554f709c08cf38c6c0fc0f1e983f219d24e52d050e52dc1e99ced1c60d60d97c2f0712f73a699d47c2ec456e9402c750f7cdd7fa358e73b10ad4e182",
+      "role": "superadmin"
+    }
+  ],
+  "barbers": [
+    {
+      "id": "ba_13bfb5b0c6e80dc9",
+      "createdAt": 1784727311658,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Carlos Mendes"
+    },
+    {
+      "id": "ba_89a4e563b8d2ed31",
+      "createdAt": 1784727311660,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Diego Alves"
+    },
+    {
+      "id": "ba_a147ffd574a48213",
+      "createdAt": 1784727311661,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Rafael Souza"
+    }
+  ],
+  "cuts": [
+    {
+      "id": "cu_263dfa0ec9bb9cb2",
+      "createdAt": 1784727311663,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Low Fade",
+      "desc": "Degradê baixo, acabamento na régua",
+      "price": 45,
+      "time": 30,
+      "icon": "✂️"
+    },
+    {
+      "id": "cu_9bf17d9921f11634",
+      "createdAt": 1784727311665,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Mid Fade",
+      "desc": "Degradê médio, transição suave",
+      "price": 45,
+      "time": 30,
+      "icon": "💈"
+    },
+    {
+      "id": "cu_fddf6fe944ccdc3e",
+      "createdAt": 1784727311668,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "High Fade",
+      "desc": "Degradê alto, contraste marcado",
+      "price": 50,
+      "time": 35,
+      "icon": "🪒"
+    },
+    {
+      "id": "cu_e645a4b32929879d",
+      "createdAt": 1784727311670,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Social",
+      "desc": "Corte clássico para o dia a dia",
+      "price": 35,
+      "time": 25,
+      "icon": "👔"
+    },
+    {
+      "id": "cu_45daaad7fd4000a4",
+      "createdAt": 1784727311672,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Corte + Barba",
+      "desc": "Combo completo com toalha quente",
+      "price": 70,
+      "time": 50,
+      "icon": "🧔"
+    },
+    {
+      "id": "cu_5c6c15353b1d0e58",
+      "createdAt": 1784727311673,
+      "tenantId": "te_7d5381c80dd4f127",
+      "name": "Barba",
+      "desc": "Desenho e finalização na navalha",
+      "price": 30,
+      "time": 20,
+      "icon": "🪒"
+    }
+  ],
+  "queue": [],
+  "ratings": [],
+  "plans": [
+    {
+      "id": "pl_1fb33322e85ca9e7",
+      "createdAt": 1784727311675,
+      "name": "Básico",
+      "price": 39.9,
+      "features": [
+        "1 barbeiro",
+        "Fila online"
+      ]
+    },
+    {
+      "id": "pl_55563da5b656efe5",
+      "createdAt": 1784727311676,
+      "name": "Profissional",
+      "price": 69.9,
+      "features": [
+        "Até 5 barbeiros",
+        "WhatsApp automático"
+      ]
+    },
+    {
+      "id": "pl_76091f31a5cffa03",
+      "createdAt": 1784727311678,
+      "name": "Premium",
+      "price": 99.9,
+      "features": [
+        "Barbeiros ilimitados",
+        "Multi-unidade"
+      ]
+    }
+  ]
+}

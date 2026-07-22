@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FilaCorte - Assinatura do Barbeiro</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    /* Barra Superior (Top Bar) */
+    header {
+      width: 100%;
+      max-width: 650px;
+      margin: 25px auto 10px auto;
+      padding: 0 15px;
+    }
+
+    .nav-container {
+      background-color: #141416;
+      border: 1px solid #242428;
+      border-radius: 40px;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 8px;
+    }
+
+    .logo-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #eab308;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+    }
+
+    nav {
+      display: flex;
+      gap: 4px;
+      background-color: #1e1e24;
+      padding: 4px;
+      border-radius: 30px;
+    }
+
+    nav a {
+      color: #a1a1aa;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+
+    nav a.active {
+      background-color: #d97706; /* Cor Dourada/Amarela do layout original */
+      color: #000000;
+      font-weight: 700;
+    }
+
+    nav a:hover:not(.active) {
+      color: #ffffff;
+    }
+
+    /* Conteúdo Principal */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 15px;
+    }
+
+    /* Cartão de Assinatura */
+    .card-container {
+      background-color: #121214;
+      border: 1px solid #26262a;
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 430px;
+      width: 100%;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+
+    .brand-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .plano-badge {
+      display: inline-block;
+      background-color: rgba(130, 10, 209, 0.15);
+      color: #c084fc;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border: 1px solid #820ad1;
+    }
+
+    .subtexto {
+      color: #a1a1aa;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+    /* Caixa do Pix (Branca com Texto Escuro Legível) */
+    .pix-box {
+      background-color: #ffffff;
+      color: #111111;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .pix-box p {
+      color: #27272a;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .chave-pix {
+      font-size: 22px;
+      font-weight: 800;
+      color: #820ad1;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .btn-copiar {
+      background-color: #820ad1;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn-copiar:hover {
+      background-color: #6d08b1;
+    }
+
+    /* Inputs do Formulário */
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #d4d4d8;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background-color: #1a1a1e;
+      border: 1px solid #3f3f46;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #820ad1;
+    }
+
+    /* Botão Principal */
+    .btn-pagar {
+      background-color: #820ad1;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(130, 10, 209, 0.3);
+    }
+
+    .btn-pagar:hover {
+      background-color: #6d08b1;
+    }
+
+    .btn-pagar:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Mensagem de Status */
+    #status-mensagem {
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .link-gerado-box {
+      margin-top: 15px;
+      background: #182232;
+      border: 1px solid #3b82f6;
+      padding: 14px;
+      border-radius: 8px;
+      word-break: break-all;
+      text-align: left;
+    }
+
+    .link-gerado-box a {
+      color: #60a5fa;
+      font-weight: bold;
+      text-decoration: underline;
+      display: block;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menu Superior Original -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-dot"></span> FilaCorte
+      </div>
+      <nav>
+        <a href="#" class="active">Área do Cliente</a>
+        <a href="#">Painel do Barbeiro</a>
+        <a href="#">Painel Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Conteúdo Central -->
+  <main>
+    <div class="card-container">
+      <h1 class="brand-title">FilaCorte</h1>
+      <div class="plano-badge">Plano Mensal Barbeiro - R$ 29,90/mês</div>
+
+      <p class="subtexto">
+        Assine para criar sua fila virtual. Os seus clientes acessarão a fila de graça pelo link que você compartilhar!
+      </p>
+
+      <!-- Caixa Pix -->
+      <div class="pix-box">
+        <p>Chave Pix (Nubank):</p>
+        <div class="chave-pix" id="chave-pix">77981593498</div>
+        <button class="btn-copiar" onclick="copiarChave()">Copiar Chave Pix</button>
+      </div>
+
+      <!-- Formulário -->
+      <div class="form-group">
+        <label for="nomeBarbearia">Nome da sua Barbearia:</label>
+        <input type="text" id="nomeBarbearia" placeholder="Ex: Barbearia do Silva">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Seu E-mail de cadastro:</label>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
+      </div>
+
+      <button class="btn-pagar" id="btn-confirmar" onclick="confirmarPagamento()">Já fiz o pagamento</button>
+
+      <div id="status-mensagem"></div>
+    </div>
+  </main>
+
+  <script>
+    const CHAVE_PIX = "77981593498";
+
+    function copiarChave() {
+      navigator.clipboard.writeText(CHAVE_PIX);
+      alert("Chave Pix copiada para a área de transferência!");
+    }
+
+    async function confirmarPagamento() {
+      const email = document.getElementById('email').value.trim();
+      const nomeBarbearia = document.getElementById('nomeBarbearia').value.trim();
+      const msgDiv = document.getElementById('status-mensagem');
+      const btn = document.getElementById('btn-confirmar');
+
+      if (!email) {
+        alert("Por favor, informe seu e-mail.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Aguardando confirmação...";
+
+      try {
+        const response = await fetch('http://localhost:3000/enviar-comprovante', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, nomeBarbearia })
+        });
+
+        const data = await response.json();
+        msgDiv.style.color = "#f59e0b"; // Amarelo
+        msgDiv.innerText = data.mensagem;
+
+        // Inicia verificação do Pix no backend
+        verificarStatus(email);
+
+      } catch (error) {
+        alert("Erro ao conectar com o servidor. Verifique se o Node.js está rodando.");
+        btn.disabled = false;
+        btn.innerText = "Já fiz o pagamento";
+      }
+    }
+
+    function verificarStatus(email) {
+      const interval = setInterval(async () => {
+        try {
+          const res = await fetch(`http://localhost:3000/status-acesso/${email}`);
+          const data = await res.json();
+
+          if (data.status === 'ativo') {
+            clearInterval(interval);
+            const msgDiv = document.getElementById('status-mensagem');
+            msgDiv.style.color = "#10b981"; // Verde
+            msgDiv.innerHTML = `
+              🎉 Pagamento Confirmado!<br>Seu plano está ativo.<br>
+              <div class="link-gerado-box">
+                <small style="color:#aaa;">Link da sua fila para enviar aos clientes:</small><br>
+                <a href="${data.linkFila}" target="_blank">${data.linkFila}</a>
+              </div>
+            `;
+          }
+        } catch (e) {
+          console.error("Aguardando aprovação...");
+        }
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
